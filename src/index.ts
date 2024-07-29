@@ -153,10 +153,13 @@ export class YoutubeTranscript {
   }
 
   /**
-   * Retrieve video id from url or string
-   * @param videoId video url or video id
+   * Retrieves the YouTube video ID from the given string.
+   *
+   * @param {string} videoId - The video ID or URL.
+   * @return {string} The extracted YouTube video ID.
+   * @throws {YoutubeTranscriptError} If the video ID cannot be retrieved.
    */
-  private static retrieveVideoId(videoId: string) {
+  static retrieveVideoId(videoId: string) {
     if (videoId.length === 11) {
       return videoId;
     }
