@@ -90,13 +90,21 @@ export class YoutubeTranscript {
   ): Promise<TranscriptResponse[]> {
     const identifier = this.retrieveVideoId(videoId);
     const ytt = new YoutubeTranscript(identifier, config);
+    return ytt.fetchTranscript();
+  }
 
-    await ytt.getPageBody();
-    ytt.splitHtml(ytt.videoPageBody);
-    ytt.getCaptionTracks(ytt.splittedHTML);
-    ytt.getTranscriptURL(ytt.captionTracks);
-    await ytt.getTranscriptResponse(ytt.transcriptURL);
-    return ytt.parseTranscript(ytt.transcriptBody, ytt.captionTracks);
+  /**
+   * Fetches the transcript for a YouTube video.
+   *
+   * @return {Promise<TranscriptResponse[]>} - A promise that resolves to an array of transcript responses.
+   */
+  public async fetchTranscript(): Promise<TranscriptResponse[]> {
+    await this.getPageBody();
+    this.splitHtml(this.videoPageBody);
+    this.getCaptionTracks(this.splittedHTML);
+    this.getTranscriptURL(this.captionTracks);
+    await this.getTranscriptResponse(this.transcriptURL);
+    return this.parseTranscript(this.transcriptBody, this.captionTracks);
   }
 
   /**

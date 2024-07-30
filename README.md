@@ -31,25 +31,33 @@ import { YoutubeTranscript } from 'youtube-transcript';
 import { request } from "obsidian";
 
 class ObsidianYoutubeTranscript extends YoutubeTranscript {
-  videoId: string;
-  videoPageBody: string;
-  transcriptBody: string;
-  public async getPageBody(): Promise<string> {
-    const videoPageResponse = await request(
-    `https://www.youtube.com/watch?v=${this.videoId}`
-    );
-    this.videoPageBody = videoPageResponse;
-    return this.videoPageBody;
-  }
+	videoId: string;
+	videoPageBody: string;
+	transcriptBody: string;
 
-  public async getTranscriptResponse(transcriptURL: string): Promise<string> {
-    const transcriptResponse = await request(transcriptURL);
-    this.transcriptBody = transcriptResponse;
-    return this.transcriptBody;
-  }
+	constructor(videoId: string) {
+		super();
+		this.videoId = YoutubeTranscript.retrieveVideoId(videoId);
+	}
+
+	public async getPageBody(): Promise<string> {
+		const videoPageResponse = await request(
+			`https://www.youtube.com/watch?v=${this.videoId}`
+		);
+		this.videoPageBody = videoPageResponse;
+		return this.videoPageBody;
+	}
+
+	public async getTranscriptResponse(transcriptURL: string): Promise<string> {
+		const transcriptResponse = await request(transcriptURL);
+		this.transcriptBody = transcriptResponse;
+		return this.transcriptBody;
+	}
 }
 
-ObsidianYoutubeTranscript.fetchTranscript(url).then(console.log);
+const ytt = new ObsidianYoutubeTranscript(url);
+const transcriptList = await ytt.fetchTranscript();
+console.debug("got transcriptList:", transcriptList);
 ```
 
 ### Methods
